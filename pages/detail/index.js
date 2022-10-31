@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -36,7 +37,7 @@ export default function Detail() {
       ) : (
         <>
           <div className="md:w-3/6 flex justify-center items-center lg:justify-end">
-            <img
+            <Image
               src={movie.Poster}
               alt="poster"
               className="w-full lg:max-w-sm"

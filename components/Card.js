@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Card({ poster, title, year, imdbID }) {
   return (
     <div className="border rounded-lg overflow-hidden">
-      <img src={poster} alt="poster" className="border-b w-full" />
+      <Image src={poster} alt="poster" className="border-b w-full" />
 
       <div className="p-5">
         <div className="w-full">
