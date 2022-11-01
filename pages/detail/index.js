@@ -17,7 +17,7 @@ export default function Detail() {
       }
 
       const response = await fetch(
-        `//www.omdbapi.com/?apikey=59d036c0&i=${id}`
+        `https://www.omdbapi.com/?apikey=59d036c0&i=${id}`
       );
       if (!response.ok) {
         return setNotFound(true);

@@ -14,7 +14,7 @@ export default function Home() {
 
     async function fetchData() {
       const response = await fetch(
-        `http://www.omdbapi.com/?apikey=59d036c0&s=${input}`
+        `https://www.omdbapi.com/?apikey=59d036c0&s=${input}`
       );
       const data = await response.json();
       const results = data.Search;
