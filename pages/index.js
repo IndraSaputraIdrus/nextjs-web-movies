@@ -3,23 +3,25 @@ import { useState, useEffect } from "react";
 import Card from "../components/Card";
 
 export default function Home() {
-  const [search, setSearch] = useState([]);
-  const [keyword, setKeyword] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [input, setInput] = useState("");
 
-  const searchHandler = async (element) => {
-    await element.preventDefault();
-    if (!keyword) {
-      return alert("please enter keywords");
+  function submitHandler(element) {
+    element.preventDefault();
+    if (!input) {
+      return alert("Please enter keyword");
     }
-    const apiUrl = `http://www.omdbapi.com/?apikey=59d036c0&s=${keyword}`;
-    const response = await fetch(apiUrl);
-    const movies = await response.json();
-    setSearch(movies.Search);
-  };
 
-  const keywordHandler = (element) => {
-    setKeyword(element.target.value);
-  };
+    async function fetchData() {
+      const response = await fetch(
+        `http://www.omdbapi.com/?apikey=59d036c0&s=${input}`
+      );
+      const data = await response.json();
+      const results = data.Search;
+      setMovies(results);
+    }
+    fetchData();
+  }
 
   return (
     <>
@@ -33,9 +35,9 @@ export default function Home() {
         <main>
           <h1 className="text-3xl font-semibold">Web Movies</h1>
 
-          <form onSubmit={searchHandler}>
+          <form onSubmit={submitHandler}>
             <input
-              onChange={keywordHandler}
+              onChange={(e) => setInput(e.target.value)}
               type="text"
               placeholder="Search Movies"
               className="my-5 px-3 py-2 ring-2 ring-blue-500 focus:ring-2 focus:ring-slate-900 outline-none border-cyan-500 overflow-hidden rounded-lg w-full md:w-2/3 lg:w-1/3"
@@ -48,17 +50,25 @@ export default function Home() {
             </button>
           </form>
 
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-5 md:mt-0 gap-2">
-            {search.map((movie) => (
-              <Card
-                key={movie.imdbID}
-                poster={movie.Poster}
-                title={movie.Title}
-                year={movie.Year}
-                imdbID={movie.imdbID}
-              />
-            ))}
-          </div>
+          {typeof movies !== "undefined" ? (
+            <div className="mt-10 grid grid-cols-2 md:grid-cols-5 md:mt-0 gap-2">
+              {movies.map((movie) => (
+                <Card
+                  key={movie.imdbID}
+                  poster={movie.Poster}
+                  title={movie.Title}
+                  year={movie.Year}
+                  imdbID={movie.imdbID}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="w-full mt-5">
+              <h1 className="text-3xl text-red-500 text-center">
+                Movies not found
+              </h1>
+            </div>
+          )}
         </main>
       </div>
     </>

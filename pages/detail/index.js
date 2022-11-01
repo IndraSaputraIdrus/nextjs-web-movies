@@ -6,30 +6,41 @@ import { useEffect, useState } from "react";
 export default function Detail() {
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const router = useRouter();
   const id = router.query.id;
 
   useEffect(() => {
     const getDetail = async () => {
+      if (!id) {
+        return setNotFound(true);
+      }
+
       const response = await fetch(
-        `http://www.omdbapi.com/?apikey=59d036c0&i=${id}`
+        `//www.omdbapi.com/?apikey=59d036c0&i=${id}`
       );
+      if (!response.ok) {
+        return setNotFound(true);
+      }
+
       const detail = await response.json();
       setLoading(false);
       setMovie(detail);
     };
     getDetail();
-  });
-  if (!id) {
+  }, []);
+
+  if (notFound) {
     return (
       <div className="text-center mt-10">
-        <h1 className="font-bold text-3xl">Halaman Tidak Ditemukan :(</h1>
+        <h1 className="font-bold text-3xl">404 Page Not Found :(</h1>
         <Link className="text-blue-500 underline my-10 block" href="/">
           {"back <"}
         </Link>
       </div>
     );
   }
+
   return (
     <div className="min-h-screen w-full flex gap-10 justify-center items-center p-10 flex-col md:flex-row lg:pr-40 xl:pr-52uuu">
       {loading ? (
@@ -41,6 +52,8 @@ export default function Detail() {
               src={movie.Poster}
               alt="poster"
               className="w-full lg:max-w-sm"
+              width={500}
+              height={500}
             />
           </div>
           <div className="md:w-3/6 lg:w-3/5 flex items-start justify-center flex-col gap-3 font-semibold">
